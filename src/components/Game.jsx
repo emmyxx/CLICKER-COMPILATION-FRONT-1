@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-// Inclure l'emoji crotte dans la liste avec une certaine probabilité
-const fruitEmojis = ['🍒', '🍒', '🍒', '🍒', '💩']; // Exemple : 1 chance sur 5 d'avoir une crotte
+
+const fruitEmojis = ['🍒', '🍒', '🍒', '🍒', '💩'];
 
 
 
@@ -13,6 +13,7 @@ const WebSocketComponent = () => {
 
   useEffect(() => {
     const wsInstance = new WebSocket("ws://localhost:8080/game");
+    //const wsInstance = new WebSocket("wss://code-with-quarkus-jvm-latest.onrender.com/"); // Utilisez cette URL pour le site déployé sur Render (mais erreur)
     setWs(wsInstance);
 
     wsInstance.onopen = () => {
@@ -21,9 +22,9 @@ const WebSocketComponent = () => {
     };
 
     wsInstance.onmessage = (event) => {
-        if(event.data.startsWith('Score: ')) { // Vérifie si le message est une mise à jour du score
+        if(event.data.startsWith('Score: ')) { 
           const newScore = parseInt(event.data.replace('Score: ', ''), 10);
-          setScore(newScore); // Met à jour le score
+          setScore(newScore); 
         } else {
           // Traite les données de fruits comme auparavant
           const receivedFruits = event.data.split(';').filter(pair => pair).map(pair => {
@@ -53,8 +54,8 @@ const WebSocketComponent = () => {
   const handleFruitClick = (fruitId) => {
     const fruit = fruits.find(fruit => fruit.id === fruitId);
     if (ws && fruit) {
-      if (fruit.emoji === '💩') { // Vérifie si l'émoji cliqué est une crotte
-        ws.send(`RemoveScore,${fruit.x},${fruit.y}`); // Format "RemoveScore,x,y"
+      if (fruit.emoji === '💩') { 
+        ws.send(`RemoveScore,${fruit.x},${fruit.y}`); 
       } else {
         ws.send(`${fruit.x},${fruit.y}`);
       }
@@ -107,7 +108,7 @@ const WebSocketComponent = () => {
         <div style={{ position: 'relative', width: '1050px', height: '600px', border: '1px solid black' }}>
           {fruits.map((fruit) => (
             <div key={fruit.id}
-                 style={{ position: 'absolute', left: `${fruit.x}px`, top: `${fruit.y}px`, fontSize: '24px', cursor: 'pointer' }}
+                 style={{ position: 'absolute', left: `${fruit.x}px`, top: `${fruit.y}px`, fontSize: '40px', cursor: 'pointer' }}
                  onClick={() => handleFruitClick(fruit.id)}>
               {fruit.emoji}
             </div>
